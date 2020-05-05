@@ -23,8 +23,8 @@ class XSConf
 
 public:
     XSConf(std::string id);
-    const std::string &operator[](const std::string&) const;
-    const std::vector<std::string>& array(const std::string &id) const;
+    std::string operator[](const std::string&) const;
+    std::vector<std::string> array(const std::string &id) const;
     std::vector<std::string> keys() const;
     std::vector<std::string> arrays() const;
 };
