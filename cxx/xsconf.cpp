@@ -5,6 +5,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <dirent.h>
+#include <stdexcept>
 
 static inline std::vector<std::string> split(const std::string& s, char seperator)
 {
@@ -59,10 +60,6 @@ class XSConf::XSConfPrivate
     std::string m_id;
     std::map<std::string, std::string> m_map;
     std::map<std::string, std::vector<std::string>> m_map_arrays;
-    std::string m_empty;
-    std::vector<std::string> m_empty_array;
-    mutable std::vector<std::string> m_keys;
-    mutable std::vector<std::string> m_keys_arrays;
 
     int _parsePath(std::string path, bool dotd = false)
     {
@@ -94,8 +91,6 @@ class XSConf::XSConfPrivate
         std::string url;
         std::string topic; /* [General] is the root topic */
         int count = 0;
-        bool add = false;
-        bool addarray = false;
 
         if(access(file.c_str(), R_OK) != 0)
         {
@@ -129,19 +124,14 @@ class XSConf::XSConfPrivate
                     m_map_arrays[trim(id, "[]")] = {};
                 }
                 m_map_arrays[trim(id, "[]")].push_back(lineconf[1]);
-                addarray = true;
-                continue;
+            }
+            else
+            {
+                m_map[id] = lineconf[1];
             }
 
             ++count;
-            add = true;
-            m_map[id] = lineconf[1];
         }
-
-        if(add && m_keys.size())
-            m_keys.clear();
-        if(addarray && m_keys_arrays.size())
-            m_keys_arrays.clear();
         return count;
     }
 
@@ -163,44 +153,36 @@ public:
 
     const std::string &get(const XSConf &x, const std::string& id) const
     {
-        if(m_map.count(id))
-        {
-            return m_map.at(id);
-        }
-        return m_empty;
-    }
-
-    const std::vector<std::string>& keys(const XSConf &x) const
-    {
-        if(m_keys.size() != m_map.size())
-        {
-            for(std::map<std::string,std::string>::const_iterator it = m_map.begin(); it != m_map.end(); ++it)
-            {
-                m_keys.push_back(it->first);
-            }
-        }
-        return m_keys;
-    }
-
-    const std::vector<std::string>& arrays(const XSConf &x) const
-    {
-        if(m_keys_arrays.size() != m_map_arrays.size())
-        {
-            for(std::map<std::string,std::vector<std::string>>::const_iterator it = m_map_arrays.begin(); it != m_map_arrays.end(); ++it)
-            {
-                m_keys_arrays.push_back(it->first);
-            }
-        }
-        return m_keys_arrays;
+        if(!m_map.count(id))
+            throw std::out_of_range(id + " don't exists");
+        return m_map.at(id);
     }
 
     const std::vector<std::string>& array(const XSConf &x, const std::string &id) const
     {
-        if(m_map_arrays.count(id))
+        if(!m_map_arrays.count(id))
+            throw std::out_of_range(id + " don't exists");
+        return m_map_arrays.at(id);
+    }
+
+    std::vector<std::string> keys(const XSConf &x) const
+    {
+        std::vector<std::string> keys;
+        for(std::map<std::string,std::string>::const_iterator it = m_map.begin(); it != m_map.end(); ++it)
         {
-            return m_map_arrays.at(id);
+            keys.push_back(it->first);
         }
-        return m_empty_array;
+        return keys;
+    }
+
+    std::vector<std::string> arrays(const XSConf &x) const
+    {
+        std::vector<std::string> keys_arrays;
+        for(std::map<std::string,std::vector<std::string>>::const_iterator it = m_map_arrays.begin(); it != m_map_arrays.end(); ++it)
+        {
+            keys_arrays.push_back(it->first);
+        }
+        return keys_arrays;
     }
 
 };
@@ -210,6 +192,6 @@ XSConf::XSConf(std::string id)
     {}
 
 const std::string &XSConf::operator[](const std::string &id) const { return pImpl->get(*this, id); }
-const std::vector<std::string>& XSConf::keys() const { return pImpl->keys(*this); }
-const std::vector<std::string>& XSConf::arrays() const { return pImpl->arrays(*this); }
 const std::vector<std::string>& XSConf::array(const std::string &id) const { return pImpl->array(*this, id); }
+std::vector<std::string> XSConf::keys() const { return pImpl->keys(*this); }
+std::vector<std::string> XSConf::arrays() const { return pImpl->arrays(*this); }
