@@ -151,14 +151,14 @@ public:
         _parsePath("/var/xsconf/");
     }
 
-    const std::string &get(const XSConf &x, const std::string& id) const
+    std::string get(const XSConf &x, const std::string& id) const
     {
         if(!m_map.count(id))
             throw std::out_of_range(id + " don't exists");
         return m_map.at(id);
     }
 
-    const std::vector<std::string>& array(const XSConf &x, const std::string &id) const
+    std::vector<std::string> array(const XSConf &x, const std::string &id) const
     {
         if(!m_map_arrays.count(id))
             throw std::out_of_range(id + " don't exists");
@@ -191,7 +191,7 @@ XSConf::XSConf(std::string id)
     : pImpl{std::make_unique<XSConfPrivate>(id)}
     {}
 
-const std::string &XSConf::operator[](const std::string &id) const { return pImpl->get(*this, id); }
-const std::vector<std::string>& XSConf::array(const std::string &id) const { return pImpl->array(*this, id); }
+std::string XSConf::operator[](const std::string &id) const { return pImpl->get(*this, id); }
+std::vector<std::string> XSConf::array(const std::string &id) const { return pImpl->array(*this, id); }
 std::vector<std::string> XSConf::keys() const { return pImpl->keys(*this); }
 std::vector<std::string> XSConf::arrays() const { return pImpl->arrays(*this); }
