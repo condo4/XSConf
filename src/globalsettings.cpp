@@ -1,4 +1,4 @@
-#include "xsconf.h"
+#include "globalsettings.h"
 #include <fstream>
 #include <cstdlib>
 #include <sys/types.h>
@@ -55,7 +55,7 @@ static inline std::vector<std::string> listdir(std::string dir)
 }
 
 // Private Implementation
-class XSConf::XSConfPrivate
+class GlobalSettings::GlobalSettingsPrivate
 {
     std::string m_id;
     std::map<std::string, std::string> m_map;
@@ -136,7 +136,7 @@ class XSConf::XSConfPrivate
     }
 
 public:
-    XSConfPrivate(std::string id)
+    GlobalSettingsPrivate(std::string id)
         : m_id(id)
     {
         std::string home = std::getenv("HOME");
@@ -147,25 +147,25 @@ public:
         // Parse: ~/.config/<id>.conf
         _parsePath(home + "/.config/");
 
-        // Parse: /var/xsconf/<id>.conf
-        _parsePath("/var/xsconf/");
+        // Parse: /var/globalsettings/<id>.conf
+        _parsePath("/var/globalsettings/");
     }
 
-    std::string get(const XSConf &x, const std::string& id) const
+    std::string get(const GlobalSettings &x, const std::string& id) const
     {
         if(!m_map.count(id))
             throw std::out_of_range(id + " don't exists");
         return m_map.at(id);
     }
 
-    std::vector<std::string> array(const XSConf &x, const std::string &id) const
+    std::vector<std::string> array(const GlobalSettings &x, const std::string &id) const
     {
         if(!m_map_arrays.count(id))
             throw std::out_of_range(id + " don't exists");
         return m_map_arrays.at(id);
     }
 
-    std::vector<std::string> keys(const XSConf &x) const
+    std::vector<std::string> keys(const GlobalSettings &x) const
     {
         std::vector<std::string> keys;
         for(std::map<std::string,std::string>::const_iterator it = m_map.begin(); it != m_map.end(); ++it)
@@ -175,7 +175,7 @@ public:
         return keys;
     }
 
-    std::vector<std::string> arrays(const XSConf &x) const
+    std::vector<std::string> arrays(const GlobalSettings &x) const
     {
         std::vector<std::string> keys_arrays;
         for(std::map<std::string,std::vector<std::string>>::const_iterator it = m_map_arrays.begin(); it != m_map_arrays.end(); ++it)
@@ -187,11 +187,11 @@ public:
 
 };
 
-XSConf::XSConf(std::string id)
-    : pImpl{std::make_unique<XSConfPrivate>(id)}
+GlobalSettings::GlobalSettings(std::string id)
+    : pImpl{std::make_unique<GlobalSettingsPrivate>(id)}
     {}
 
-std::string XSConf::operator[](const std::string &id) const { return pImpl->get(*this, id); }
-std::vector<std::string> XSConf::array(const std::string &id) const { return pImpl->array(*this, id); }
-std::vector<std::string> XSConf::keys() const { return pImpl->keys(*this); }
-std::vector<std::string> XSConf::arrays() const { return pImpl->arrays(*this); }
+std::string GlobalSettings::operator[](const std::string &id) const { return pImpl->get(*this, id); }
+std::vector<std::string> GlobalSettings::array(const std::string &id) const { return pImpl->array(*this, id); }
+std::vector<std::string> GlobalSettings::keys() const { return pImpl->keys(*this); }
+std::vector<std::string> GlobalSettings::arrays() const { return pImpl->arrays(*this); }

@@ -1,6 +1,6 @@
 import os, os.path
 
-class XSConf:
+class GlobalSettings:
 
     def __init__(self, id):
         self.m_id = id
@@ -15,8 +15,8 @@ class XSConf:
         # Parse: ~/.config/<id>.conf
         self._parsePath(home + "/.config/");
 
-        # Parse: /var/xsconf/<id>.conf
-        self._parsePath("/var/xsconf/");
+        # Parse: /var/globalsettings/<id>.conf
+        self._parsePath("/var/globalsettings/");
 
     def __getitem__(self, key):
         if key in self.m_map.keys():

@@ -1,4 +1,4 @@
-# XSConf
+# GlobalSettings
 eXtensible Simple Configuration file
 
 
@@ -31,12 +31,12 @@ foo = toto
 ```cpp
 /* C++ Usage */
 
-#include <xsconf.h>
+#include <globalsettings.h>
 #include <stdio>
 
 int main(int argc, char *argv[])
 {
-    XSConf conf("myapp");
+    GlobalSettings conf("myapp");
 
     std::cout << conf["foo"] << std::endl; // Print toto
     std::cout << conf["SectionTutu/foo"] << std::endl; // Print CaFe
@@ -48,9 +48,9 @@ int main(int argc, char *argv[])
 ```python
 # Python example
 
-from xsconf import XSConf
+from globalsettings import GlobalSettings
 
-XSConf conf("myapp")
+GlobalSettings conf("myapp")
 
 print("TOTO: %s"%conf["toto"]) # Print tutu
 ```

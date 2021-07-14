@@ -11,18 +11,18 @@
  * RO /etc/<id>.conf
  * RO /etc/<id>.conf.d/*.conf
  * RO ~/.config/<id>.conf
- * RW /var/xsconf/<id>.conf
+ * RW /var/globalsettings/<id>.conf
  */
 
-class XSConf
+class GlobalSettings
 {
-    class XSConfPrivate;
+    class GlobalSettingsPrivate;
     std::experimental::propagate_const< // const-forwarding pointer wrapper
         std::unique_ptr<                // unique-ownership opaque pointer
-            XSConfPrivate>> pImpl;      // to the forward-declared implementation class
+            GlobalSettingsPrivate>> pImpl;      // to the forward-declared implementation class
 
 public:
-    XSConf(std::string id);
+    GlobalSettings(std::string id);
     std::string operator[](const std::string&) const;
     std::vector<std::string> array(const std::string &id) const;
     std::vector<std::string> keys() const;
