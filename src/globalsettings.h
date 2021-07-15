@@ -5,7 +5,6 @@
 #include <map>
 #include <vector>
 #include <memory>
-#include <experimental/propagate_const>
 
 /*
  * Source of configuration:
@@ -29,10 +28,7 @@ public:
     std::vector<std::string> arrays() const;
 
 private:
-    std::experimental::propagate_const< // const-forwarding pointer wrapper
-        std::unique_ptr<                // unique-ownership opaque pointer
-            GlobalSettingsPrivate>> pImpl;      // to the forward-declared implementation class
-
+    std::unique_ptr<GlobalSettingsPrivate> m_ptr;
 };
 
 #endif // GLOBALSETTINGS_H

@@ -188,11 +188,11 @@ public:
 };
 
 GlobalSettings::GlobalSettings(std::string id)
-    : pImpl{std::make_unique<GlobalSettingsPrivate>(id)}
+    : m_ptr{std::make_unique<GlobalSettingsPrivate>(id)}
     {}
 
-std::string GlobalSettings::operator[](const std::string &id) const { return pImpl->get(*this, id); }
-std::vector<std::string> GlobalSettings::array(const std::string &id) const { return pImpl->array(*this, id); }
-std::vector<std::string> GlobalSettings::keys() const { return pImpl->keys(*this); }
-std::vector<std::string> GlobalSettings::arrays() const { return pImpl->arrays(*this); }
+std::string GlobalSettings::operator[](const std::string &id) const { return m_ptr->get(*this, id); }
+std::vector<std::string> GlobalSettings::array(const std::string &id) const { return m_ptr->array(*this, id); }
+std::vector<std::string> GlobalSettings::keys() const { return m_ptr->keys(*this); }
+std::vector<std::string> GlobalSettings::arrays() const { return m_ptr->arrays(*this); }
 GlobalSettings::~GlobalSettings() = default;
