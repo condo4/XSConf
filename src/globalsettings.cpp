@@ -55,7 +55,7 @@ static inline std::vector<std::string> listdir(std::string dir)
 }
 
 // Private Implementation
-class GlobalSettings::GlobalSettingsPrivate
+class GlobalSettingsPrivate
 {
     std::string m_id;
     std::map<std::string, std::string> m_map;
@@ -195,3 +195,4 @@ std::string GlobalSettings::operator[](const std::string &id) const { return pIm
 std::vector<std::string> GlobalSettings::array(const std::string &id) const { return pImpl->array(*this, id); }
 std::vector<std::string> GlobalSettings::keys() const { return pImpl->keys(*this); }
 std::vector<std::string> GlobalSettings::arrays() const { return pImpl->arrays(*this); }
+GlobalSettings::~GlobalSettings() = default;
