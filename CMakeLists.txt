@@ -1,18 +1,19 @@
 cmake_minimum_required(VERSION 3.0)
 
-project(GlobalSettings VERSION 0.1.0)
+project(globalsettings VERSION 0.1.0 LANGUAGES CXX)
 
 option(WITH_PYTHON "Create python binding" OFF)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_library(GlobalSettings SHARED
+add_library(globalsettings SHARED
   src/globalsettings.h src/globalsettings.cpp
 )
-set_target_properties(GlobalSettings PROPERTIES VERSION ${CMAKE_PROJECT_VERSION} SOVERSION 1)
-set_target_properties(GlobalSettings PROPERTIES PUBLIC_HEADER "src/globalsettings.h")
+set_target_properties(globalsettings PROPERTIES VERSION ${CMAKE_PROJECT_VERSION} SOVERSION 1)
+set_target_properties(globalsettings PROPERTIES PUBLIC_HEADER "src/globalsettings.h")
 
-install(TARGETS GlobalSettings
+install(TARGETS globalsettings
     EXPORT "GlobalSettingsTargets"
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
