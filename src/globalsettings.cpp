@@ -5,7 +5,6 @@
 #include <vector>
 #include <filesystem>
 #include <climits>
-#include <unistd.h>
 
 static inline void trim(std::string & str)
 {
@@ -206,3 +205,4 @@ void GlobalSettings::bypass()
 }
 
 GlobalSettings::~GlobalSettings() = default;
+

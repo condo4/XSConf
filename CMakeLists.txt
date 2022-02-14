@@ -11,10 +11,18 @@ add_library(globalsettings SHARED
   src/globalsettings.h src/globalsettings.cpp
 )
 set_target_properties(globalsettings PROPERTIES VERSION ${CMAKE_PROJECT_VERSION} SOVERSION 1)
-set_target_properties(globalsettings PROPERTIES PUBLIC_HEADER "src/globalsettings.h")
+
+add_executable(settings src/settings.cpp)
+target_include_directories(settings PRIVATE src)
+target_link_libraries(settings globalsettings)
 
 install(TARGETS globalsettings
     EXPORT "GlobalSettingsTargets"
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+)
+
+install(TARGETS settings
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
