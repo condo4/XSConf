@@ -32,14 +32,16 @@ foo = toto
 /* C++ Usage */
 
 #include <globalsettings.h>
-#include <stdio>
+#include <iostream>
 
 int main(int argc, char *argv[])
 {
-    GlobalSettings conf("myapp");
+    GlobalSettings conf;
 
-    std::cout << conf["foo"] << std::endl; // Print toto
-    std::cout << conf["SectionTutu/foo"] << std::endl; // Print CaFe
+    std::cout << std::get<std::string>(conf.get("foo")) << std::endl; // Print toto
+    std::cout << std::get<std::string>(conf.get("foo", "SectionTutu")) << std::endl; // Print CaFe
+
+    conf.set("foo", "baz");
 
     return 0;
 }
@@ -48,9 +50,10 @@ int main(int argc, char *argv[])
 ```python
 # Python example
 
-from globalsettings import GlobalSettings
+from pyglobalsettings import GlobalSettings
 
-GlobalSettings conf("myapp")
+conf = GlobalSettings()
 
-print("TOTO: %s"%conf["toto"]) # Print tutu
+print("TOTO: %s" % conf.get("toto")) # Print tutu
+print("FOO: %s" % conf.get("foo", "SectionTutu", "default")) # Print CaFe
 ```

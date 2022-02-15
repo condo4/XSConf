@@ -1,6 +1,6 @@
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.8)
 
-project(globalsettings VERSION 0.1.0 LANGUAGES CXX)
+project(globalsettings VERSION 0.5.0 LANGUAGES CXX)
 
 option(WITH_PYTHON "Create python binding" OFF)
 
@@ -30,12 +30,19 @@ install(TARGETS settings
 if(WITH_PYTHON)
     message(STATUS "Build with python binding")
     find_package(PythonLibs REQUIRED)
+    set(PYTHON_MODULE_EXTENSION ".so" CACHE INTERNAL "Cross python lib extension")
+    find_package(pybind11 REQUIRED)
+    find_package(Python3 COMPONENTS Development REQUIRED)
+    include_directories(${Python3_INCLUDE_DIRS})
+
     if ("${PYTHONPATH}" STREQUAL "")
         string(REGEX MATCH "libpython(.*).so" PYTHON_LIBRARY_FILENAME ${PYTHON_LIBRARY})
         string(REGEX REPLACE "(lib)(python.*)(.so)" "\\2" PYCODE ${PYTHON_LIBRARY_FILENAME})
         set(PYTHONPATH /usr/lib/${PYCODE}/site-packages)
     endif()
-    install(FILES python/__init__.py DESTINATION ${PYTHONPATH}/globalsettings/)
+    pybind11_add_module(pyglobalsettings python/bindings.cpp)
+    target_link_libraries(pyglobalsettings PUBLIC globalsettings)
+    install(TARGETS pyglobalsettings LIBRARY DESTINATION ${PYTHONPATH})
 endif(WITH_PYTHON)
 
 
