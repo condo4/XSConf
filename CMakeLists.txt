@@ -15,7 +15,7 @@ add_library(globalsettings SHARED
 )
 set_target_properties(globalsettings PROPERTIES VERSION ${CMAKE_PROJECT_VERSION} SOVERSION 1)
 set_target_properties(globalsettings PROPERTIES PUBLIC_HEADER "src/globalsettings.h")
-target_link_libraries(globalsettings PUBLIC Threads::Threads)
+target_link_libraries(globalsettings PRIVATE Threads::Threads)
 
 
 add_executable(settings src/settings.cpp)
