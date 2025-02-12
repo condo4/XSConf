@@ -7,12 +7,16 @@ option(WITH_PYTHON "Create python binding" ON)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+find_package (Threads REQUIRED)
+
 add_library(globalsettings SHARED
   src/globalsettings.h src/globalsettings.cpp
   src/changewatcher.h src/changewatcher.cpp
 )
 set_target_properties(globalsettings PROPERTIES VERSION ${CMAKE_PROJECT_VERSION} SOVERSION 1)
 set_target_properties(globalsettings PROPERTIES PUBLIC_HEADER "src/globalsettings.h")
+target_link_libraries(globalsettings PUBLIC Threads::Threads)
+
 
 add_executable(settings src/settings.cpp)
 target_include_directories(settings PRIVATE src)
