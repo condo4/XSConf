@@ -4,15 +4,12 @@
 #include <functional>
 #include <variant>
 #include <string>
-#include <map>
 #include <memory>
-#include <algorithm>
 
 using SettingKey = std::pair<std::string, std::string>;
 using SettingValue = std::variant<std::string, int, double, bool>;
 
 class GlobalSettingsPrivate;
-
 class GlobalSettings
 {
 public:
