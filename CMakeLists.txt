@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.14)
 
-project(globalsettings VERSION 1.0.2 LANGUAGES CXX)
+project(globalsettings VERSION 1.0.3 LANGUAGES CXX)
 
 option(WITH_PYTHON "Create python binding" ON)
 
@@ -12,9 +12,10 @@ find_package (Threads REQUIRED)
 add_library(globalsettings SHARED
   src/globalsettings.h src/globalsettings.cpp
   src/changewatcher.h src/changewatcher.cpp
+  src/utilssettings.h
 )
 set_target_properties(globalsettings PROPERTIES VERSION ${CMAKE_PROJECT_VERSION} SOVERSION 1)
-set_target_properties(globalsettings PROPERTIES PUBLIC_HEADER "src/globalsettings.h")
+set_target_properties(globalsettings PROPERTIES PUBLIC_HEADER "src/globalsettings.h;src/utilssettings.h")
 target_link_libraries(globalsettings PRIVATE Threads::Threads)
 
 
